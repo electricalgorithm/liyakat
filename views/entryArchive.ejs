@@ -1,0 +1,61 @@
+<!--
+<div class="container col-md-6">
+    
+    <% if (entries.length) { %> <% entries.forEach(entry => { %>
+
+    <div class="card shadow-sm rounded mb-4" tabindex="0">
+    <div class="card-header"><%= entry.createdAt %></div>
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+        <p><%= entry.comment %></p>
+        <footer class="blockquote-footer"><%= entry.name %></footer>
+        </blockquote>
+    </div>
+    </div>
+
+    <% }) %> <% } else { %>
+
+    <div class="container col-md-6">
+    <div class="card shadow-sm rounded text-center">
+        <div class="card-body">
+        <% if (error) { %>
+        <h4>Bir şeyler ters gitti! <a href="/torpil-arsivi">Yenile</a></h4>
+        <% } else { %>
+        <h4>Hiç torpil bulunamadı! <a href="/entries/new">Ekle</a></h4>
+        <% } %>
+        </div>
+    </div>
+    </div>
+
+    <% } %>
+</div>
+-->
+
+<!-- ENTRIES -->
+<div class="col-12 col-lg-12">
+    <% if (entries.length) { %> <% entries.forEach(entry => { %>
+        <div class="card shadow-sm rounded mb-4" tabindex="0">
+            <div class="card-header"><%= entry.createdAt %></div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                    <p><%= entry.comment %></p>
+                    <footer class="blockquote-footer"><%= entry.name %></footer>
+                    </blockquote>
+                </div>
+            </div>
+        
+    <% }) %> <% } else { %>
+            
+            <div class="text-center">
+                <% if (error) { %>
+                    <h4>Hay aksi! Babişko Asuman bizi sabote ediyor.</h4>
+                    <a href="/torpil-arsivi">Sayfayı yenile!</a></h4>
+                <% } else { %>
+                    <div class="p-3">
+                        <h4>Mükemmel! Hiç torpil bulunamadı.</h4>
+                    </div>
+                <% } %>
+            </div>
+        
+    <% } %>
+</div>

@@ -1,0 +1,32 @@
+:root {
+    --bs-font-sans-serif: 'Open Sans', sans-serif;
+}
+
+a {
+    color: var(--bs-dark);
+}
+
+body {
+    padding-top: 0.5em;
+    background-color: #ffffd8;
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1.logoText {
+    font-family: 'Alfa Slab One', cursive;
+}
+
+h3.entityTitle {
+    font-family: 'Merriweather', serif;
+}
+
+.month_card {
+    text-align: center;
+    display: flex;
+    text-decoration: none;
+    transition: 250ms all;
+}
+
+.month_card:hover {
+    transform: scale(1.05);
+}

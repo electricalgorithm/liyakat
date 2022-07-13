@@ -1,0 +1,56 @@
+<div class="row flex-lg-row align-items-center g-5 py-4 mb-4">
+
+<div class="col-12 col-lg-6">
+    <h3 class="entityTitle display-6 fw-bold mb-3">Tamamen anonim.</h3>
+        <p class="lead">
+            Yaşadığınız stresi tahmin edebiliyoruz. Çok kızgınsınız, kelimelerin gücünü kullanarak hakkınızı savunmak istiyorsunuz.
+            Buna rağmen anınızı paylaştığınız yer hakkında emin olmak çok doğru bir karar. Buyurun, neden bize güvenmelisiniz, bundan
+            bahsedelim.
+        </p>
+        <p class="lead">
+            <%= site_title %>, kesinlikle sizin bilgilerinizi araştırmayan, bunları saklamayan ve tüm kaynak kodları açık ve özgür
+            şekilde internetten ulaşılabilir bir platformdur. Kullanıcı adınız dışında (ki isteğe bağlıdır) dışında
+            bir kişinin sizin gerçek kimliğinizi anlayabilmesi için hiçbir yol yoktur.
+        </p>
+        <p class="lead">
+            Daha dikkatli olmak için lütfen kullanıcı adınıza sizden ait bir şey eklemeyiniz.
+        </p>
+</div>
+
+
+<div class="col-12 col-lg-6">
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%- error.message -%>
+        </div>
+    <% } %>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label for="nickname" class="form-label">Kullanıcı adı (isteğe bağlı)</label>
+            <input
+              autofocus
+              type="text"
+              name="nickname"
+              class="form-control"
+              id="nickname"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="text" class="form-label">Torpil Anınız</label>
+            <textarea
+              name="text"
+              class="form-control"
+              id="text"
+              rows="10"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn btn-dark">Paylaş</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

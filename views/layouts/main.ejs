@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 
+        <%= typeof page_title != "undefined" ? page_title : "" %> | 
+        <%= typeof site_title != "undefined" ? site_title : "Liyakat!" %>
+    </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Merriweather:wght@300;400&family=Open+Sans:wght@500&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container-xxl px-md-5 bg-white shadow-lg">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <h1 class="logoText"><%= typeof site_title != "undefined" ? site_title : "Liyakat!" %></h1>
+            </a>
+        
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 link-dark"><%= typeof about_title != "undefined" ? about_title : "Hakkında" %></a></li>
+                <li><a href="/torpil-arsivi" class="nav-link px-2 link-dark"><%= typeof entries_title != "undefined" ? entries_title : "Torpil Arşivi" %></a></li>
+                <li><a href="/ayin-en-iyisi" class="nav-link px-2 link-dark"><%= typeof last_month_winner != "undefined" ? last_month_winner : "Ayın En İyisi" %></a></li>
+            </ul>
+        
+            <div class="col-md-3 text-end">
+                <a href="/ayin-oylamasi"><button type="button" class="btn btn-outline-dark me-2"><%= typeof vote_entries != "undefined" ? vote_entries : "Oyla" %></button></a>
+                <a href="/torpil-ekle"><button type="button" class="btn btn-dark"><%= typeof entry_add_title != "undefined" ? entry_add_title : "Torpil Ekle" %></button></a>
+            </div>
+        </header>
+        <main>
+            <%- body -%>
+        </main>
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <span class="mb-3 mb-md-0 text-muted text-center">© 2022 <%= typeof site_title != "undefined" ? site_title : "Liyakat!" %> Hiçbir hakkı yoktur.</span>
+            </div>
+        </footer>
+    </div>
+</body>
+
+<footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</footer>
+</html>
