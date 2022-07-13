@@ -17,7 +17,7 @@ const entryScheme = new mongoose.Schema({
     },
 
     votes: {
-        type: number,
+        type: Number,
         default: 0
     }
 });

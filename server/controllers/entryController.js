@@ -19,17 +19,37 @@ exports.about = async(req, res) => {
 }
 
 exports.entryArchive = async(req, res) => {
-    res.render("entryArchive", {
-        page_title: ARCHIVE_NAME,
-        site_title: SITE_NAME,
-        about_title: ABOUT_NAME,
-        entries_title: ARCHIVE_NAME,
-        entry_add_title: ADD_ENTRY_NAME,
-        vote_entries: VOTE_ENTRIES_NAME,
-        last_month_winner: LAST_MONTH_NAME,
-        
-        entries: {},
-        error: true
+    const Entry = require('../models/entryScheme');
+    
+    await Entry.find({})
+    .then(databaseEntries => {
+        databaseEntries.reverse();
+        res.status(200).render("entryArchive", {
+            page_title: ARCHIVE_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entries: databaseEntries,
+            error: null
+        });
+    })
+    .catch(databaseError => {
+        res.status(400).render("entryArchive", {
+            page_title: ARCHIVE_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entries: [],
+            error: databaseError
+        })
     });
 }
 
