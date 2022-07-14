@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+const PROD_MODE = false;
+const collectionName = PROD_MODE ? "prod_data" : "dev_data";
+
 const entryScheme = new mongoose.Schema({
     nickname: {
         type: String,
@@ -22,4 +25,4 @@ const entryScheme = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("Entry", entryScheme);
+module.exports = mongoose.model(collectionName, entryScheme);

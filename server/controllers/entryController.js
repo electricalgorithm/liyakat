@@ -1,3 +1,6 @@
+const Entry = require('../models/entryScheme');
+
+
 const SITE_NAME = "Liyakat.org";
 const ABOUT_NAME = "Nedir?";
 const ARCHIVE_NAME = "Geçmiş Torpiller";
@@ -18,9 +21,7 @@ exports.about = async(req, res) => {
     });
 }
 
-exports.entryArchive = async(req, res) => {
-    const Entry = require('../models/entryScheme');
-    
+exports.entryArchive = async(req, res) => {    
     await Entry.find({})
     .then(databaseEntries => {
         databaseEntries.reverse();
@@ -114,3 +115,34 @@ exports.randomEntry = async(req, res) => {
         last_month_winner: LAST_MONTH_NAME,
     })
 }
+
+
+/** POST REQUESTS */
+exports.addEntryPost = async (req, res) => {  
+    const paramText = req.body.text;
+    if (req.body.nickname)
+        paramNickname = req.body.nickname;    
+    else
+        paramNickname = "Anonim Asumanzede";
+    
+    const entry = new Entry({
+        nickname: paramNickname, 
+        text: paramText
+    });
+  
+    entry
+      .save()
+      .then(data => res.redirect('/torpil-arsivi'))
+      .catch(error => res.status(400).render('addEntry', {
+            page_title: ADD_ENTRY_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            error: error,
+            })
+        );
+  }
