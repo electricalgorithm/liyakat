@@ -13,6 +13,11 @@ const entryScheme = new mongoose.Schema({
         type: String,
         required: true,
     },
+
+    entryId: {
+        type: Number,
+        required: true,
+    },
     
     createdAt: {
         type: Date,

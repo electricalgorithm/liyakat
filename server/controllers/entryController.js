@@ -70,15 +70,47 @@ exports.addEntry = async(req, res) => {
 }
 
 exports.voteEntries = async(req, res) => {
-    res.render("voteEntries", {
-        page_title: VOTE_ENTRIES_NAME,
-        site_title: SITE_NAME,
-        about_title: ABOUT_NAME,
-        entries_title: ARCHIVE_NAME,
-        entry_add_title: ADD_ENTRY_NAME,
-        vote_entries: VOTE_ENTRIES_NAME,
-        last_month_winner: LAST_MONTH_NAME,
+    let endDate = DateTime.now().toISO();
+    let startDate = DateTime.now().plus({ months: -1 }).toISO();
+    let CurrentMonthAndYear = "Temmuz 2022";
+    
+    // Only search for last months entries.
+    await Entry.find({
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate
+        }
     })
+    .then(databaseEntries => {
+        databaseEntries.reverse();
+        res.status(200).render("voteEntries", {
+            page_title: ARCHIVE_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entries: databaseEntries,
+            currentMonthAndYear: CurrentMonthAndYear,
+            error: null
+        });
+    })
+    .catch(databaseError => {
+        res.status(400).render("entryArchive", {
+            page_title: ARCHIVE_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entries: [],
+            error: databaseError
+        })
+    });
 }
 
 exports.bestEntry = async(req, res) => {
@@ -129,7 +161,8 @@ exports.addEntryPost = async (req, res) => {
     const entry = new Entry({
         nickname: paramNickname, 
         text: paramText,
-        date: DateTime.local().setZone('UTC+3').toFormat("DDD")
+        date: DateTime.local().setZone('UTC+3').toFormat("DDD"),
+        entryId: Math.floor(Math.random() * 99999999)
     });
   
     entry
@@ -147,4 +180,8 @@ exports.addEntryPost = async (req, res) => {
             error: error,
             })
         );
+  }
+
+  exports.voteEntryPost = async (req, res) => {
+    const userIpAdress = req.ip;
   }
