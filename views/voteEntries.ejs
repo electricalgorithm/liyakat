@@ -1,4 +1,13 @@
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+<!-- TITLE -->
+<div class="h-100 p-5 mb-3 bg-light border rounded-2">
+    <h2 class="text-center"><%= currentMonthAndYear %> Oylaması</h2>
+    <p class="text-center">
+        Aşağıdaki anılardan oylamak istediğiniz anının altındaki "Oyla" butonuna bastığınızda sisteme oyunuz otoamtik ileticektir. 
+        Unutmayınız ki, yalnızca bir oy hakkınız vardır. Çok beğendiğiniz ve defalarca oy vermek istediğiniz bir anı ile karşılaşırsanız
+        farklı internet ağları üzerinden tekrar tekrar oylayabileceğinizi hatırlatmak isteriz. Ne de olsa size güveniyoruz :)
+    </p>
+</div>
 
 <!-- ENTRIES -->
 <div class="row" data-masonry='{"percentPosition": true }'>
@@ -8,7 +17,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-6 col-lg-9">
-                            <b><%=entry.nickname%></b>
+                            <b><%=entry.nickname%></b>    
                         </div>
                         <div class="col-6 col-lg-3">
                             <p class="text-end"><%= entry.date %></p>
@@ -21,13 +30,8 @@
                     </blockquote>
                 </div>
                 <div class="card-footer">
-                    <div class="row">
-                        <div class="col-6 col-lg-9">
-                            <small class="text-muted"><%= entry.votes%> kişi bunu etkileyici buldu.</small>
-                        </div>
-                        <div class="col-6 col-lg-3">
-                            <p class="text-end text-muted">#<%=entry.entryId%></p>
-                        </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-dark btn-sm" type="button">#<%=entry.entryId%>'i Oyla</button>
                     </div>
                 </div>
             </div>
