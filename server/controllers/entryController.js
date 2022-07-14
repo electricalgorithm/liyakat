@@ -1,4 +1,5 @@
 const Entry = require('../models/entryScheme');
+const { DateTime } = require("luxon");
 
 
 const SITE_NAME = "Liyakat.org";
@@ -127,7 +128,8 @@ exports.addEntryPost = async (req, res) => {
     
     const entry = new Entry({
         nickname: paramNickname, 
-        text: paramText
+        text: paramText,
+        date: DateTime.local().setZone('UTC+3').toFormat("DDD")
     });
   
     entry

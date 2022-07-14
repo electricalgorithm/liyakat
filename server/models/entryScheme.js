@@ -22,7 +22,14 @@ const entryScheme = new mongoose.Schema({
     votes: {
         type: Number,
         default: 0
+    },
+
+    date: {
+        type: String,
+        required: true,
+        default: null
     }
+
 });
 
 module.exports = mongoose.model(collectionName, entryScheme);
