@@ -7,7 +7,19 @@
         Unutmayınız ki, yalnızca bir oy hakkınız vardır. Çok beğendiğiniz ve defalarca oy vermek istediğiniz bir anı ile karşılaşırsanız
         farklı internet ağları üzerinden tekrar tekrar oylayabileceğinizi hatırlatmak isteriz. Ne de olsa size güveniyoruz :)
     </p>
+    
+    <% if (error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%- error.message -%>
+        </div>
+    <% } %>
 </div>
+
+<% if (is_voted_before) { %>
+<div class="alert alert-danger text-center" role="alert">
+    Çoktan oylamaya katıldığın için tekrar katılman mümkün değildir.
+</div>
+<% } %>
 
 <!-- ENTRIES -->
 <div class="row" data-masonry='{"percentPosition": true }'>
@@ -30,9 +42,16 @@
                     </blockquote>
                 </div>
                 <div class="card-footer">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-dark btn-sm" type="button">#<%=entry.entryId%>'i Oyla</button>
-                    </div>
+                    <form method="POST">
+                        <input type="hidden" name="entryId" class="form-control" value="<%=entry.entryId%>"/>
+                        <div class="d-grid gap-2">
+                            <% if (!is_voted_before) { %>
+                                <button class="btn btn-outline-dark btn-sm" type="submit">#<%=entry.entryId%>'i Oyla</button>
+                            <% } else { %>
+                                <button class="btn btn-outline-dark btn-sm" type="submit" disabled>#<%=entry.entryId%>'i Oyla</button>
+                            <% } %>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -53,5 +72,14 @@
 </div>
 
 <script>
-    
+    async function PostVote(SelectedVoteID) {
+        // Create the POST details.
+        const fetchInit = {
+            method: "POST",
+            body: new FormData().append("entryId", SelectedVoteID)
+        };
+        
+        // Send the request.
+        fetch("/ayin-oylamasi", fetchInit);
+    }
 </script>

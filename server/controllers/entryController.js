@@ -1,4 +1,5 @@
 const Entry = require('../models/entryScheme');
+const Vote = require('../models/voteScheme');
 const { DateTime } = require("luxon");
 
 
@@ -73,6 +74,14 @@ exports.voteEntries = async(req, res) => {
     let endDate = DateTime.now().toISO();
     let startDate = DateTime.now().plus({ months: -1 }).toISO();
     let CurrentMonthAndYear = "Temmuz 2022";
+    let isUserVotedBefore = false;
+
+    // Check if user voted before.
+    await Vote.find({
+        ipAddress: req.ip
+    }).then(foundVote => {
+        isUserVotedBefore = foundVote.length == 0 ? false : true;
+    })
     
     // Only search for last months entries.
     await Entry.find({
@@ -84,7 +93,7 @@ exports.voteEntries = async(req, res) => {
     .then(databaseEntries => {
         databaseEntries.reverse();
         res.status(200).render("voteEntries", {
-            page_title: ARCHIVE_NAME,
+            page_title: VOTE_ENTRIES_NAME,
             site_title: SITE_NAME,
             about_title: ABOUT_NAME,
             entries_title: ARCHIVE_NAME,
@@ -94,12 +103,13 @@ exports.voteEntries = async(req, res) => {
             
             entries: databaseEntries,
             currentMonthAndYear: CurrentMonthAndYear,
+            is_voted_before: isUserVotedBefore,
             error: null
         });
     })
     .catch(databaseError => {
         res.status(400).render("entryArchive", {
-            page_title: ARCHIVE_NAME,
+            page_title: VOTE_ENTRIES_NAME,
             site_title: SITE_NAME,
             about_title: ABOUT_NAME,
             entries_title: ARCHIVE_NAME,
@@ -108,6 +118,8 @@ exports.voteEntries = async(req, res) => {
             last_month_winner: LAST_MONTH_NAME,
             
             entries: [],
+            currentMonthAndYear: CurrentMonthAndYear,
+            is_voted_before: isUserVotedBefore,
             error: databaseError
         })
     });
@@ -149,6 +161,18 @@ exports.randomEntry = async(req, res) => {
     })
 }
 
+exports.votedCongrats = async(req, res) => {
+    res.render("votedCongrats", {
+        page_title: "Oylandı",
+        site_title: SITE_NAME,
+        about_title: ABOUT_NAME,
+        entries_title: ARCHIVE_NAME,
+        entry_add_title: ADD_ENTRY_NAME,
+        vote_entries: VOTE_ENTRIES_NAME,
+        last_month_winner: LAST_MONTH_NAME,
+    });
+}
+
 
 /** POST REQUESTS */
 exports.addEntryPost = async (req, res) => {  
@@ -165,8 +189,7 @@ exports.addEntryPost = async (req, res) => {
         entryId: Math.floor(Math.random() * 99999999)
     });
   
-    entry
-      .save()
+    entry.save()
       .then(data => res.redirect('/torpil-arsivi'))
       .catch(error => res.status(400).render('addEntry', {
             page_title: ADD_ENTRY_NAME,
@@ -182,6 +205,94 @@ exports.addEntryPost = async (req, res) => {
         );
   }
 
-  exports.voteEntryPost = async (req, res) => {
-    const userIpAdress = req.ip;
-  }
+exports.voteEntryPost = async (req, res) => {
+    // Get the last month's entries.
+    let endDate = DateTime.now().toISO();
+    let startDate = DateTime.now().plus({ months: -1 }).toISO();
+    let CurrentMonthAndYear = "Temmuz 2022";
+    
+    if (req.body.entryId) {
+        await Entry.findOneAndUpdate({entryId: parseInt(req.body.entryId)}, {$inc: {votes: 1}}).exec();
+    }
+
+    const vote = new Vote({
+        entryId: parseInt(req.body.entryId),
+        ipAddress: req.ip
+    });
+
+    vote.save()
+    .then(obj => res.redirect("/oylandi"))
+    .catch(databaseError => {
+        res.status(400).render("voteEntries", {
+            page_title: ARCHIVE_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entries: [],
+            currentMonthAndYear: CurrentMonthAndYear,
+            error: databaseError
+        })
+    });
+    
+    /*
+    // Only search for last months entries.
+    await Entry.find({
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate
+        }
+    })
+    .then(databaseEntries => {
+        // Validate the post request.
+        if (req.body.entryId) {
+            const entryToVote = databaseEntries.find(o => o.entryId === parseInt(req.body.entryId));
+            if (entryToVote) {
+        
+                // Create the vote.
+                const vote = new Vote({
+                    entryId: req.body.entryId,
+                    ipAddress: req.ip
+                });
+    
+                // Save it to the database.
+                vote.save()
+                .then(data => res.redirect("/oylandi"))
+                .catch(databaseError => res.status(400).render('voteEntries', {
+                    page_title: VOTE_ENTRIES_NAME,
+                    site_title: SITE_NAME,
+                    about_title: ABOUT_NAME,
+                    entries_title: ARCHIVE_NAME,
+                    entry_add_title: ADD_ENTRY_NAME,
+                    vote_entries: VOTE_ENTRIES_NAME,
+                    last_month_winner: LAST_MONTH_NAME,
+                    
+                    entries: databaseEntriesToShow,
+                    currentMonthAndYear: CurrentMonthAndYear,
+                    error: databaseError
+                    })
+                );
+            }
+        }
+    })
+    .catch(databaseError => {
+        res.status(400).render("voteEntries", {
+            page_title: ARCHIVE_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entries: [],
+            currentMonthAndYear: CurrentMonthAndYear,
+            error: databaseError
+        })
+    });
+
+    */
+}
