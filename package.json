@@ -20,6 +20,7 @@
     "luxon": "^3.0.1",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.4",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "party-js": "^2.2.0"
   }
 }

@@ -1,0 +1,28 @@
+<div class="row pt-5 pb-3 mb-4">
+    <hr>
+    <h2 class="text-center display-6 fw-normal"><%= currentMonthAndYear %> Ayının En İyisi</h2>
+    <p class="fs-5 text-muted text-center">
+        Bu ayın ödüllerini, acıları ile hak edenlerini açıklama vakti geldi.
+        Buyurunuz, en liyakatsız, babişko Asuman vakamız!
+    </p>
+    <hr>
+</div>
+<div class="row p-6">
+    <div class="col-12 col-lg-6 p-3">
+        <img src="img/anonymous_profile.png" class="img-fluid rounded mx-auto d-block">
+    </div>
+    <div class="col-12 col-lg-6">
+        <div class="card w-100 h-100 p-3">
+            <div class="card-body">
+              <h5 class="card-title text-center"><%= best_author %></h5>
+              <p class="card-text text-center">
+                <%= best_entry %>
+              </p>
+            </div>
+          </div>
+    </div>
+</div>
+<script src="js/confetti.min.js"></script>
+<script>
+    confetti.start(3000)
+</script>

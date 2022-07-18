@@ -126,15 +126,50 @@ exports.voteEntries = async(req, res) => {
 }
 
 exports.bestEntry = async(req, res) => {
-    res.render("bestEntry", {
-        page_title: LAST_MONTH_NAME,
-        site_title: SITE_NAME,
-        about_title: ABOUT_NAME,
-        entries_title: ARCHIVE_NAME,
-        entry_add_title: ADD_ENTRY_NAME,
-        vote_entries: VOTE_ENTRIES_NAME,
-        last_month_winner: LAST_MONTH_NAME,
+    let endDate = DateTime.now().toISO();
+    let startDate = DateTime.now().plus({ months: -1 }).toISO();
+    let CurrentMonthAndYear = "Temmuz 2022";
+
+    // Only search for last months entries.
+    await Entry.find({
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate
+        }
     })
+    .sort({votes: -1})
+    .then(databaseEntries => {
+        res.status(200).render("bestEntry", {
+            page_title: VOTE_ENTRIES_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            best_author: databaseEntries[0].nickname,
+            best_entry: databaseEntries[0].text,
+            currentMonthAndYear: CurrentMonthAndYear,
+            error: null
+        });
+    })
+    .catch(databaseError => {
+        res.status(400).render("bestEntry", {
+            page_title: VOTE_ENTRIES_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            best_author: "Babişko Asuman!!!",
+            best_entry: "Şu an veritabanımıza sızdığını size söyleyebiliriz. Lütfen sayfayı yenileyin!",
+            currentMonthAndYear: CurrentMonthAndYear,
+            error: databaseError
+        })
+    });
 }
 
 exports.mostRecentEntry = async(req, res) => {
