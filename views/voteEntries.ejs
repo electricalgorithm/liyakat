@@ -1,4 +1,17 @@
 <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+<!-- CONGRATS MODAL -->
+<div class="modal fade" id="voteCongratsModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="card">
+            <div class="text-right cross"> <i class="fa fa-times"></i> </div>
+            <div class="card-body text-center"> <img src="https://img.icons8.com/bubbles/200/000000/trophy.png">
+                <h4>CONGRATULATIONS!</h4>
+                <p>You have been personally selected to take part in our 2017 annual visitors survey!</p> <button class="btn btn-out btn-square continue">CONTINUE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- TITLE -->
 <div class="h-100 p-5 mb-3 bg-light border rounded-2">
     <h2 class="text-center"><%= currentMonthAndYear %> Oylaması</h2>
@@ -46,7 +59,7 @@
                         <input type="hidden" name="entryId" class="form-control" value="<%=entry.entryId%>"/>
                         <div class="d-grid gap-2">
                             <% if (!is_voted_before) { %>
-                                <button class="btn btn-outline-dark btn-sm" type="submit">#<%=entry.entryId%>'i Oyla</button>
+                                <button class="btn btn-outline-dark btn-sm" type="submit" data-toggle="modal" data-target="#voteCongratsModal">#<%=entry.entryId%>'i Oyla</button>
                             <% } else { %>
                                 <button class="btn btn-outline-dark btn-sm" type="submit" disabled>#<%=entry.entryId%>'i Oyla</button>
                             <% } %>
