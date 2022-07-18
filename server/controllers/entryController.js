@@ -173,15 +173,35 @@ exports.bestEntry = async(req, res) => {
 }
 
 exports.mostRecentEntry = async(req, res) => {
-    res.render("mostRecentEntry", {
-        page_title: "En Güncel Torpil",
-        site_title: SITE_NAME,
-        about_title: ABOUT_NAME,
-        entries_title: ARCHIVE_NAME,
-        entry_add_title: ADD_ENTRY_NAME,
-        vote_entries: VOTE_ENTRIES_NAME,
-        last_month_winner: LAST_MONTH_NAME,
+    await Entry.find({})
+    .then(databaseEntries => {
+        res.status(200).render("entryPage", {
+            page_title: "En Güncel Torpil",
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entry: databaseEntries[0],
+            error: null
+        });
     })
+    .catch(databaseError => {
+        res.status(400).render("entryPage", {
+            page_title: "En Güncel Torpil",
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+            
+            entry: null,
+            error: "Aradığınız entry bulunamadı. Belki de hiçbir torpil vakası girilmemiştir!"
+        })
+    });
 }
 
 exports.randomEntry = async(req, res) => {

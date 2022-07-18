@@ -1,0 +1,20 @@
+<div class="col-12">
+    <div class="card w-100 h-100 pt-3">
+        <div class="card-body">
+            <h5 class="card-title text-center"><%= entry.nickname %></h5>
+            <p class="card-text text-center">
+                <%= entry.text %>
+            </p>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-6 col-lg-9">
+                    <small class="text-muted"><%= entry.votes%> kişi bunu etkileyici buldu.</small>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <p class="text-end text-muted">#<%= entry.entryId %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
