@@ -126,8 +126,8 @@ exports.voteEntries = async(req, res) => {
 }
 
 exports.bestEntry = async(req, res) => {
-    let endDate = DateTime.now().toISO();
-    let startDate = DateTime.now().plus({ months: -1 }).toISO();
+    let endDate = DateTime.now().plus({ months: -1 }).toISO();
+    let startDate = DateTime.now().plus({ months: -2 }).toISO();
     let CurrentMonthAndYear = "Temmuz 2022";
 
     // Only search for last months entries.
