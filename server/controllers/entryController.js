@@ -2,14 +2,36 @@ const Entry = require('../models/entryScheme');
 const Vote = require('../models/voteScheme');
 const { DateTime } = require("luxon");
 
+/**
+ * Get the page titles from environmental
+ * variables.
+ */
+const SITE_NAME = process.env.SITE_NAME;
+const ABOUT_NAME = process.env.ABOUT_PAGE_TITLE;
+const ARCHIVE_NAME = process.env.ARCHIVE_PAGE_TITLE;
+const LAST_MONTH_NAME = process.env.LAST_BEST_PAGE_TITLE;
+const ADD_ENTRY_NAME = process.env.ADD_ENTRY_PAGE_TITLE;
+const VOTE_ENTRIES_NAME = process.env.VOTE_ENTRIES_PAGE_TITLE;
 
-const SITE_NAME = "Liyakat.org";
-const ABOUT_NAME = "Nedir?";
-const ARCHIVE_NAME = "Geçmiş Torpiller";
-const LAST_MONTH_NAME = "Geçen Ayın En İyisi";
-const ADD_ENTRY_NAME = "Torpil Ekle";
-const VOTE_ENTRIES_NAME = "Oyla";
-
+/**
+ * Get the last month's starting and ending time
+ * to query in database.
+ */
+const lastMonthStart = DateTime.now().plus({
+    months: -1,
+    days: -(DateTime.now().day - 1)
+}).toISO();
+const thisMonthStart = DateTime.now().plus({
+    days: -(DateTime.now().day - 1)
+}).toISO();
+const thisMonthName = DateTime.now().setLocale(process.env.LOCALIZATON).toLocaleString({
+    month: "long",
+    year: "numeric"
+});
+const lastMonthName = DateTime.now().plus({months: -1}).setLocale(process.env.LOCALIZATON).toLocaleString({
+    month: "long",
+    year: "numeric"
+});
 
 exports.about = async(req, res) => {
     res.render("index", {
@@ -71,9 +93,6 @@ exports.addEntry = async(req, res) => {
 }
 
 exports.voteEntries = async(req, res) => {
-    let endDate = DateTime.now().toISO();
-    let startDate = DateTime.now().plus({ months: -1 }).toISO();
-    let CurrentMonthAndYear = "Temmuz 2022";
     let isUserVotedBefore = false;
 
     // Check if user voted before.
@@ -85,10 +104,7 @@ exports.voteEntries = async(req, res) => {
     
     // Only search for last months entries.
     await Entry.find({
-        createdAt: {
-            $gte: startDate,
-            $lte: endDate
-        }
+        createdAt: { $gte: thisMonthStart }
     })
     .then(databaseEntries => {
         databaseEntries.reverse();
@@ -102,7 +118,7 @@ exports.voteEntries = async(req, res) => {
             last_month_winner: LAST_MONTH_NAME,
             
             entries: databaseEntries,
-            currentMonthAndYear: CurrentMonthAndYear,
+            currentMonthAndYear: thisMonthName,
             is_voted_before: isUserVotedBefore,
             error: null
         });
@@ -118,7 +134,7 @@ exports.voteEntries = async(req, res) => {
             last_month_winner: LAST_MONTH_NAME,
             
             entries: [],
-            currentMonthAndYear: CurrentMonthAndYear,
+            currentMonthAndYear: thisMonthName,
             is_voted_before: isUserVotedBefore,
             error: databaseError
         })
@@ -126,15 +142,11 @@ exports.voteEntries = async(req, res) => {
 }
 
 exports.bestEntry = async(req, res) => {
-    let endDate = DateTime.now().plus({ months: -1 }).toISO();
-    let startDate = DateTime.now().plus({ months: -2 }).toISO();
-    let CurrentMonthAndYear = "Temmuz 2022";
-
     // Only search for last months entries.
     await Entry.find({
         createdAt: {
-            $gte: startDate,
-            $lte: endDate
+            $gte: lastMonthStart,
+            $lte: thisMonthStart
         }
     })
     .sort({votes: -1})
@@ -150,7 +162,7 @@ exports.bestEntry = async(req, res) => {
             
             best_author: databaseEntries[0].nickname,
             best_entry: databaseEntries[0].text,
-            currentMonthAndYear: CurrentMonthAndYear,
+            currentMonthAndYear: lastMonthName,
             error: null
         });
     })
@@ -164,9 +176,9 @@ exports.bestEntry = async(req, res) => {
             vote_entries: VOTE_ENTRIES_NAME,
             last_month_winner: LAST_MONTH_NAME,
             
-            best_author: "Babişko Asuman!!!",
+            best_author: "Babişko Asuman!",
             best_entry: "Şu an veritabanımıza sızdığını size söyleyebiliriz. Lütfen sayfayı yenileyin!",
-            currentMonthAndYear: CurrentMonthAndYear,
+            currentMonthAndYear: lastMonthName,
             error: databaseError
         })
     });
@@ -283,12 +295,7 @@ exports.addEntryPost = async (req, res) => {
         );
   }
 
-exports.voteEntryPost = async (req, res) => {
-    // Get the last month's entries.
-    let endDate = DateTime.now().toISO();
-    let startDate = DateTime.now().plus({ months: -1 }).toISO();
-    let CurrentMonthAndYear = "Temmuz 2022";
-    
+exports.voteEntryPost = async (req, res) => {    
     if (req.body.entryId) {
         await Entry.findOneAndUpdate({entryId: parseInt(req.body.entryId)}, {$inc: {votes: 1}}).exec();
     }
@@ -311,66 +318,8 @@ exports.voteEntryPost = async (req, res) => {
             last_month_winner: LAST_MONTH_NAME,
             
             entries: [],
-            currentMonthAndYear: CurrentMonthAndYear,
+            currentMonthAndYear: thisMonthName,
             error: databaseError
         })
     });
-    
-    /*
-    // Only search for last months entries.
-    await Entry.find({
-        createdAt: {
-            $gte: startDate,
-            $lte: endDate
-        }
-    })
-    .then(databaseEntries => {
-        // Validate the post request.
-        if (req.body.entryId) {
-            const entryToVote = databaseEntries.find(o => o.entryId === parseInt(req.body.entryId));
-            if (entryToVote) {
-        
-                // Create the vote.
-                const vote = new Vote({
-                    entryId: req.body.entryId,
-                    ipAddress: req.ip
-                });
-    
-                // Save it to the database.
-                vote.save()
-                .then(data => res.redirect("/oylandi"))
-                .catch(databaseError => res.status(400).render('voteEntries', {
-                    page_title: VOTE_ENTRIES_NAME,
-                    site_title: SITE_NAME,
-                    about_title: ABOUT_NAME,
-                    entries_title: ARCHIVE_NAME,
-                    entry_add_title: ADD_ENTRY_NAME,
-                    vote_entries: VOTE_ENTRIES_NAME,
-                    last_month_winner: LAST_MONTH_NAME,
-                    
-                    entries: databaseEntriesToShow,
-                    currentMonthAndYear: CurrentMonthAndYear,
-                    error: databaseError
-                    })
-                );
-            }
-        }
-    })
-    .catch(databaseError => {
-        res.status(400).render("voteEntries", {
-            page_title: ARCHIVE_NAME,
-            site_title: SITE_NAME,
-            about_title: ABOUT_NAME,
-            entries_title: ARCHIVE_NAME,
-            entry_add_title: ADD_ENTRY_NAME,
-            vote_entries: VOTE_ENTRIES_NAME,
-            last_month_winner: LAST_MONTH_NAME,
-            
-            entries: [],
-            currentMonthAndYear: CurrentMonthAndYear,
-            error: databaseError
-        })
-    });
-
-    */
 }
