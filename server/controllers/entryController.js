@@ -97,7 +97,8 @@ exports.voteEntries = async(req, res) => {
 
     // Check if user voted before.
     await Vote.find({
-        ipAddress: req.ip
+        ipAddress: req.ip,
+        $gte: thisMonthStart
     }).then(foundVote => {
         isUserVotedBefore = foundVote.length == 0 ? false : true;
     })
