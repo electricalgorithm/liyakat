@@ -1,5 +1,8 @@
+# Liyakat
+a platform to collect entries, handla a voting each month, and to show previously voted best entry.
+
 <p align="center">
-<img width="900" height="450" src="https://github.com/electricalgorithm/liyakat/raw/dev/assets/banner%20900x450.png">
+  <img width="250"  src="https://github.com/electricalgorithm/liyakat/raw/dev/assets/logo 500x500.png">
 </p>
 
 ## Configure .env
