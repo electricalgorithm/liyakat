@@ -275,7 +275,7 @@ exports.addEntryPost = async (req, res) => {
     const entry = new Entry({
         nickname: paramNickname, 
         text: paramText,
-        date: DateTime.local().setZone('UTC+3').toFormat("DDD"),
+        date: DateTime.now().setLocale(process.env.LOCALIZATON).toFormat("dd MMMM yyyy"),
         entryId: Math.floor(Math.random() * 99999999)
     });
   
