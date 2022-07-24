@@ -1,5 +1,6 @@
-# Liyakat
-Liyakat, günlük hayatta karşılaştığımız, duyduğumuz torpil hikayelerinizi toplayabileceğiniz bir platformdur.
+<p align="center">
+<img width="900" height="450" src="https://github.com/electricalgorithm/liyakat/raw/dev/assets/banner%20900x450.png">
+</p>
 
 ## Configure .env
 ```
