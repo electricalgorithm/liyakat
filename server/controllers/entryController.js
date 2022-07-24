@@ -101,6 +101,7 @@ exports.voteEntries = async(req, res) => {
         $gte: thisMonthStart
     }).then(foundVote => {
         isUserVotedBefore = foundVote.length == 0 ? false : true;
+        console.log(foundVote, foundVote.length, isUserVotedBefore);
     })
     
     // Only search for last months entries.
