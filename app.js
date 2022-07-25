@@ -1,15 +1,17 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser')
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5353;
 
 require("dotenv").config();
 
 app.use(express.urlencoded( {extended: true} ));
 app.use(express.static("public"));
 app.use(expressLayouts);
+app.use(cookieParser());
 
 app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");

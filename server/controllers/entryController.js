@@ -100,8 +100,7 @@ exports.voteEntries = async(req, res) => {
         ipAddress: req.ip,
         $gte: thisMonthStart
     }).then(foundVote => {
-        isUserVotedBefore = foundVote.length == 0 ? false : true;
-        console.log(req.ip, foundVote, foundVote.length, isUserVotedBefore);
+        isUserVotedBefore = (foundVote.length > 0 ? true : false ) || (req.cookies.voterID == undefined ? false : true);
     })
     
     // Only search for last months entries.
@@ -297,7 +296,15 @@ exports.addEntryPost = async (req, res) => {
         );
   }
 
-exports.voteEntryPost = async (req, res) => {    
+exports.voteEntryPost = async (req, res) => {
+    nextMonthStart = new DateTime(thisMonthStart).plus({months: 1}).toISO();
+    livingMinutesOfCookie = DateTime.now().diff(nextMonthStart, "days").toString();
+    res.cookie("voterID", (Math.random()*999999999).toString(), {
+        expires: livingMinutesOfCookie,
+        httpOnly: true,
+        sameSite: "lax"
+    });
+    
     if (req.body.entryId) {
         await Entry.findOneAndUpdate({entryId: parseInt(req.body.entryId)}, {$inc: {votes: 1}}).exec();
     }
