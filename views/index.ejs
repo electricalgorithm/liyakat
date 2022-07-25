@@ -21,56 +21,17 @@
 </div>
 
 <!-- MONTHS -->
-
 <div class="row row-cols-2 row-cols-lg-6 g-2 g-lg-3 py-4">
-    <a hred="#" class="col month_card">
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Temmuz 2022</h5>
-                <p class="card-text">23 girdi</p>
+    <% monthsEntriesDetails.forEach(element => { %>
+        <div class="col month_card">
+            <div class="card text-center" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"><%=element.monthName%></h5>
+                    <p class="card-text"><%=element.entryCount%> girdi</p>
+                </div>
             </div>
         </div>
-    </a>
-    <a hred="#" class="col month_card">
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Haziran 2022</h5>
-                <p class="card-text">17 girdi</p>
-            </div>
-        </div>
-    </a>
-    <a hred="#" class="col month_card">
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Mayıs 2022</h5>
-                <p class="card-text">30 girdi</p>
-            </div>
-        </div>
-    </a>
-    <a hred="#" class="col month_card">
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Nisan 2022</h5>
-                <p class="card-text">7 girdi</p>
-            </div>
-        </div>
-    </a>
-    <a hred="#" class="col month_card">
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Mart 2022</h5>
-                <p class="card-text">8 girdi</p>
-            </div>
-        </div>
-    </a>
-    <a hred="#" class="col month_card">
-        <div class="card text-center" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Şubat 2022</h5>
-                <p class="card-text">2 girdi</p>
-            </div>
-        </div>
-    </a> 
+    <% }) %>
 </div>
 
     

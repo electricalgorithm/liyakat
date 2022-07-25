@@ -33,15 +33,58 @@ const lastMonthName = DateTime.now().plus({months: -1}).setLocale(process.env.LO
     year: "numeric"
 });
 
-exports.about = async(req, res) => {
-    res.render("index", {
-        page_title: ABOUT_NAME,
-        site_title: SITE_NAME,
-        about_title: ABOUT_NAME,
-        entries_title: ARCHIVE_NAME,
-        entry_add_title: ADD_ENTRY_NAME,
-        vote_entries: VOTE_ENTRIES_NAME,
-        last_month_winner: LAST_MONTH_NAME
+exports.about = async (req, res) => {
+    // Save the months' durations and their local titles.
+    DateArray = [];
+    DateArray.push({
+        monthName: thisMonthName,
+        entryCount: 0,
+        startDate: thisMonthStart,
+        endDate: DateTime.now().plus({days: -(DateTime.now().day - 1), months: 1}).toISO()
+    });
+
+    for (let element = -1; element > -6; element--) {
+        DateArray.push({
+            monthName: DateTime.now().plus({months: element}).setLocale(process.env.LOCALIZATON).toLocaleString({month: "long", year: "numeric"}),
+            entryCount: 0,
+            startDate: DateTime.now().plus({days: -(DateTime.now().day - 1), months: element}).toISO(),
+            endDate: DateTime.now().plus({days: -(DateTime.now().day - 1), months: element + 1}).toISO()
+        });
+    }
+
+    // Create a map of promises to find entry count in each month.
+    const dateEntryCountBoxesPromises = DateArray.map(async dateArrayItem => {
+        await Entry.find({
+            createdAt: {
+                $gte: dateArrayItem.startDate,
+                $lt: dateArrayItem.endDate
+            }
+        })
+        .then(foundData => {
+            dateArrayItem.entryCount = foundData.length
+        });
+    });
+
+    // Wait for all promises and render the page.
+    Promise.all(dateEntryCountBoxesPromises).then(arrayOfResponses => {
+        res.render("index", {
+            page_title: ABOUT_NAME,
+            site_title: SITE_NAME,
+            about_title: ABOUT_NAME,
+            entries_title: ARCHIVE_NAME,
+            entry_add_title: ADD_ENTRY_NAME,
+            vote_entries: VOTE_ENTRIES_NAME,
+            last_month_winner: LAST_MONTH_NAME,
+    
+            monthsEntriesDetails: [
+                {monthName: DateArray[0].monthName, entryCount: DateArray[0].entryCount},
+                {monthName: DateArray[1].monthName, entryCount: DateArray[1].entryCount},
+                {monthName: DateArray[2].monthName, entryCount: DateArray[2].entryCount},
+                {monthName: DateArray[3].monthName, entryCount: DateArray[3].entryCount},
+                {monthName: DateArray[4].monthName, entryCount: DateArray[4].entryCount},
+                {monthName: DateArray[5].monthName, entryCount: DateArray[5].entryCount},
+            ]
+        });
     });
 }
 
