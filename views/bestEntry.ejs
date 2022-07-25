@@ -8,18 +8,30 @@
     <hr>
 </div>
 <div class="row p-6">
-    <div class="col-12 col-lg-6 p-3">
-        <img src="img/anonymous_profile.png" class="img-fluid rounded mx-auto d-block">
-    </div>
-    <div class="col-12 col-lg-6">
-        <div class="card w-100 h-100 p-3">
-            <div class="card-body">
-              <h5 class="card-title text-center"><%= best_author %></h5>
-              <p class="card-text text-center">
-                <%= best_entry %>
-              </p>
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-10 col-xl-8">
+                  
+                <div class="card rounded-3">
+                    <div class="card-body p-5">
+          
+                        <div class="d-flex justify-content-center mb-4">
+                            <img src="img/anonymous_profile.png" class="rounded-circle shadow-1-strong" width="200" height="200" />
+                        </div>
+                        <figure class="text-center mb-0">
+                            <blockquote class="blockquote mb-4">
+                                <p>
+                                    <span class="font-italic"><%= best_entry %></span>
+                                </p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer mb-0">
+                                <%= best_author %>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
             </div>
-          </div>
+        </div>
     </div>
 </div>
 <script src="js/confetti.min.js"></script>
