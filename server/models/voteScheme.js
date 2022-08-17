@@ -13,6 +13,11 @@ const voteScheme = new mongoose.Schema({
         type: Number,
         required: true,
     },
+
+    voterId: {
+        type: Number,
+        required: false,
+    },
     
     createdAt: {
         type: Date,
