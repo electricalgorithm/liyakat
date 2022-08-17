@@ -140,7 +140,7 @@ exports.voteEntries = async(req, res) => {
 
     // Check if user voted before.
     await Vote.find({
-        ipAddress: req.ip,
+        $or: [{ipAddress: req.ip}, {voterId: req.cookies.voterID}],
         $gte: thisMonthStart
     }).then(foundVote => {
         isUserVotedBefore = (foundVote.length > 0 ? true : false ) || (req.cookies.voterID == undefined ? false : true);
@@ -342,7 +342,9 @@ exports.addEntryPost = async (req, res) => {
 exports.voteEntryPost = async (req, res) => {
     nextMonthStart = new DateTime(thisMonthStart).plus({months: 1}).toISO();
     livingMinutesOfCookie = DateTime.now().diff(nextMonthStart, "days").toString();
-    res.cookie("voterID", (Math.random()*999999999).toString(), {
+    voterID = (Math.random()*999999999).toString()
+
+    res.cookie("voterID", voterID, {
         expires: livingMinutesOfCookie,
         httpOnly: true,
         sameSite: "lax"
@@ -354,7 +356,8 @@ exports.voteEntryPost = async (req, res) => {
 
     const vote = new Vote({
         entryId: parseInt(req.body.entryId),
-        ipAddress: req.ip
+        ipAddress: req.ip,
+        voterID: voterID
     });
 
     vote.save()
