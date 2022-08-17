@@ -1,14 +1,15 @@
 {
-  "name": "liyakat-alpha",
-  "version": "0.0.2",
-  "description": "Liyakat Alpha, günlük hayatta karşılaştığımız, duyduğumuz torpil hikayelerinizi toplayabileceğiniz bir platformdur.",
-  "main": "index.js",
+  "name": "liyakat-beta",
+  "version": "0.1.2",
+  "description": "Liyakat is a platform where you can collect your stories that we come across and hear in daily life, and let the other people to vote for the best.",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
   },
-  "keywords": [],
-  "author": "Gökhan Koçmarlı (electricalgorithm)",
+  "keywords": ["liyakat", "voting", "entries", "archive"],
+  "author": "Gökhan Koçmarlı <github.com/electricalgorithm>",
+  "homepage": "https://liyakat.herokuapp.com",
+  "repository": "github:electricalgorithm/liyakat",
   "license": "MIT",
   "dependencies": {
     "cookie-parser": "^1.4.6",

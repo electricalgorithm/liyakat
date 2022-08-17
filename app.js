@@ -31,3 +31,5 @@ db.once("open", function() {
 })
 
 app.listen(port, () => console.log(`> Sunucu ${port}'da çalıştırıldı.`))
+
+module.exports = app

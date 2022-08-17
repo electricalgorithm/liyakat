@@ -5,6 +5,15 @@ a platform to collect entries, handla a voting each month, and to show previousl
   <img width="250"  src="https://github.com/electricalgorithm/liyakat/raw/dev/assets/logo 500x500.png">
 </p>
 
+## Install and Run
+```bash
+~$ mkdir LiyakatWeb
+~$ cd LiyakatWeb
+~$ npm install liyakat-beta
+~$ vim .env   # Add your configuration settings.
+~$ npm start
+```
+
 ## Configure .env
 ```
 MONGO_URI = YOUR_SECRET_MONGO_URI
