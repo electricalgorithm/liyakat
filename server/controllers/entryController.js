@@ -143,7 +143,7 @@ exports.voteEntries = async(req, res) => {
         $or: [{ipAddress: req.ip}, {voterId: req.cookies.voterID}],
         $gte: thisMonthStart
     }).then(foundVote => {
-        isUserVotedBefore = (foundVote.length > 0 ? true : false ) || (req.cookies.voterID == undefined ? false : true);
+        isUserVotedBefore = (foundVote.length > 0 ? true : false );
     })
     
     // Only search for last months entries.
