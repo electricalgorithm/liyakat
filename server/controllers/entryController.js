@@ -231,7 +231,7 @@ exports.bestEntry = async(req, res) => {
 }
 
 exports.mostRecentEntry = async(req, res) => {
-    await Entry.find({})
+    await Entry.find().sort({$natural: -1}).limit(1)
     .then(databaseEntries => {
         res.status(200).render("entryPage", {
             page_title: "En Güncel Torpil",
@@ -242,7 +242,7 @@ exports.mostRecentEntry = async(req, res) => {
             vote_entries: VOTE_ENTRIES_NAME,
             last_month_winner: LAST_MONTH_NAME,
             
-            entry: databaseEntries[0],
+            entry: databaseEntries[databaseEntries.length-1],
             error: null
         });
     })
