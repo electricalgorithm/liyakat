@@ -246,7 +246,7 @@ exports.mostRecentEntry = async(req, res) => {
             error: null
         });
     })
-    .catch(databaseError => {
+    .catch(() => {
         res.status(400).render("entryPage", {
             page_title: "En Güncel Torpil",
             site_title: SITE_NAME,
@@ -257,7 +257,7 @@ exports.mostRecentEntry = async(req, res) => {
             last_month_winner: LAST_MONTH_NAME,
             
             entry: null,
-            error: "Aradığınız entry bulunamadı. Belki de hiçbir torpil vakası girilmemiştir!"
+            error: {message: "Aradığınız entry bulunamadı. Belki de hiçbir torpil vakası girilmemiştir!"}
         });
     });
 }
